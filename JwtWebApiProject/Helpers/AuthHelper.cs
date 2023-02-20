@@ -36,7 +36,6 @@ public class AuthHelper
         var claims = new[]
         {
             new Claim(ClaimTypes.NameIdentifier, user.Username),
-            new Claim(ClaimTypes.Email, user.EmailAddress),
 			new Claim(ClaimTypes.Role, role.Name)
         };
 
