@@ -3,6 +3,7 @@ using JwtWebApi.Interfaces;
 using JwtWebApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace JwtWebApi.Controllers;
 
@@ -20,7 +21,7 @@ public class AuthController : ControllerBase
 	}
 
 	[HttpPost]
-	public async Task<IActionResult> AuthenticateUser([FromBody] UserAuthModel credentials)
+	public async Task<IActionResult> AuthenticateUserAsync([FromBody] UserAuthModel credentials)
 	{
 		if (string.IsNullOrEmpty(credentials.Username) ||
 		    string.IsNullOrEmpty(credentials.EmailAddress) ||
@@ -49,6 +50,11 @@ public class AuthController : ControllerBase
 			_cfg.GetSection("Jwt:Issuer").Value,
 			_cfg.GetSection("Jwt:Audience").Value);
 
-		return Ok(new JwtTokenResponse {Token = token});
+		return Ok(new JwtTokenResponse
+		{
+			Token = new JwtSecurityTokenHandler().WriteToken(token),
+			CreatedAt = DateTime.Now,
+			Expires = token.ValidTo
+		});
 	}
 }

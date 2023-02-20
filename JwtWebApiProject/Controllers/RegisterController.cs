@@ -18,7 +18,7 @@ public class RegisterController : ControllerBase
 	}
 
 	[HttpPost("User")]
-	public async Task<ActionResult<UserModel>> Register([FromBody] UserAuthModel request)
+	public async Task<ActionResult<UserModel>> RegisterUserAsync([FromBody] UserAuthModel request)
 	{
 		if (string.IsNullOrEmpty(request.EmailAddress) ||
 		    string.IsNullOrEmpty(request.Username) ||
@@ -27,7 +27,7 @@ public class RegisterController : ControllerBase
 			return BadRequest("Username, email or password should not be empty!");
 		}
 
-		var newUser = await InitializeUser(request, UserRoleNames.User);
+		var newUser = await InitializeUserAsync(request, UserRoleNames.User);
 		try
 		{
             await _uow.Users.CreateAsync(newUser);
@@ -42,7 +42,7 @@ public class RegisterController : ControllerBase
     }
 
     [HttpPost("Admin")]
-    public async Task<ActionResult<UserModel>> RegisterAdmin([FromBody] UserAuthModel request)
+    public async Task<ActionResult<UserModel>> RegisterAdminAsync([FromBody] UserAuthModel request)
     {
 	    if (string.IsNullOrEmpty(request.EmailAddress) ||
 	        string.IsNullOrEmpty(request.Username) ||
@@ -51,7 +51,7 @@ public class RegisterController : ControllerBase
 		    return BadRequest("Username, email or password should not be empty!");
 	    }
 
-		var newUserAdmin = await InitializeUser(request, UserRoleNames.Administrator);
+		var newUserAdmin = await InitializeUserAsync(request, UserRoleNames.Administrator);
 		try
 	    {
 		    await _uow.Users.CreateAsync(newUserAdmin);
@@ -66,7 +66,7 @@ public class RegisterController : ControllerBase
     }
 
 	[HttpPost("Manager")]
-	public async Task<ActionResult<UserModel>> RegisterManager([FromBody] UserAuthModel request)
+	public async Task<ActionResult<UserModel>> RegisterManagerAsync([FromBody] UserAuthModel request)
 	{
 		if (string.IsNullOrEmpty(request.EmailAddress) ||
 	        string.IsNullOrEmpty(request.Username) ||
@@ -75,7 +75,7 @@ public class RegisterController : ControllerBase
 		    return BadRequest("Username, email or password should not be empty!");
 	    }
 
-		var newUserManager = await InitializeUser(request, UserRoleNames.Manager);
+		var newUserManager = await InitializeUserAsync(request, UserRoleNames.Manager);
 		try
 	    {
 		    await _uow.Users.CreateAsync(newUserManager);
@@ -89,7 +89,7 @@ public class RegisterController : ControllerBase
 	    return Ok(newUserManager);
     }
 
-    private async Task<UserModel> InitializeUser(UserAuthModel request, string role) 
+    private async Task<UserModel> InitializeUserAsync(UserAuthModel request, string role) 
     {
 	    AuthHelper.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 

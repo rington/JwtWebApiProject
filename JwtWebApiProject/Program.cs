@@ -47,7 +47,11 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // Add configuration for JWT authentication
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication(x =>
+	{
+		x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+		x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+	})
 	.AddJwtBearer(options =>
 	{
 		options.TokenValidationParameters = new TokenValidationParameters

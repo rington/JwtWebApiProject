@@ -28,7 +28,7 @@ public class AuthHelper
         }
     }
 
-    public static string GenerateJwtToken(UserModel user, RoleModel role, string jwtKey, string jwtIssuer, string jwtAudience)
+    public static JwtSecurityToken GenerateJwtToken(UserModel user, RoleModel role, string jwtKey, string jwtIssuer, string jwtAudience)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -45,6 +45,6 @@ public class AuthHelper
           expires: DateTime.Now.AddMinutes(30),
           signingCredentials: credentials);
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        return token;
     }
 }
