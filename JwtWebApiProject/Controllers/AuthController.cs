@@ -49,7 +49,6 @@ public class AuthController : ControllerBase
 			_cfg.GetSection("Jwt:Issuer").Value,
 			_cfg.GetSection("Jwt:Audience").Value);
 
-		return Ok(token);
+		return Ok(new JwtTokenResponse {Token = token});
 	}
 }
-
