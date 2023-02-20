@@ -22,11 +22,11 @@ public class AuthController : ControllerBase
 	[HttpPost]
 	public async Task<IActionResult> AuthenticateUser([FromBody] UserAuthModel credentials)
 	{
-		if (string.IsNullOrEmpty(credentials.Username) &&
-		    string.IsNullOrEmpty(credentials.EmailAddress) &&
+		if (string.IsNullOrEmpty(credentials.Username) ||
+		    string.IsNullOrEmpty(credentials.EmailAddress) ||
 		    string.IsNullOrEmpty(credentials.Password))
 		{
-			return BadRequest("Username, email and password should not be empty!");
+			return BadRequest("Username, email or password should not be empty!");
 		}
 
 		var user = await _uow.Users.Get(credentials);

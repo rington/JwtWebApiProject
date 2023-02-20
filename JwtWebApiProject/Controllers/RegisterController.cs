@@ -20,11 +20,11 @@ public class RegisterController : ControllerBase
 	[HttpPost("User")]
 	public async Task<ActionResult<UserModel>> Register([FromBody] UserAuthModel request)
 	{
-		if (string.IsNullOrEmpty(request.EmailAddress) &&
-		    string.IsNullOrEmpty(request.Username) &&
+		if (string.IsNullOrEmpty(request.EmailAddress) ||
+		    string.IsNullOrEmpty(request.Username) ||
 		    string.IsNullOrEmpty(request.Password))
 		{
-			return BadRequest("Username, email and password should not be empty!");
+			return BadRequest("Username, email or password should not be empty!");
 		}
 
 		var newUser = await InitializeUser(request, UserRoleNames.User);
@@ -44,11 +44,11 @@ public class RegisterController : ControllerBase
     [HttpPost("Admin")]
     public async Task<ActionResult<UserModel>> RegisterAdmin([FromBody] UserAuthModel request)
     {
-	    if (string.IsNullOrEmpty(request.EmailAddress) &&
-	        string.IsNullOrEmpty(request.Username) &&
+	    if (string.IsNullOrEmpty(request.EmailAddress) ||
+	        string.IsNullOrEmpty(request.Username) ||
 	        string.IsNullOrEmpty(request.Password))
 	    {
-		    return BadRequest("Username, email and password should not be empty!");
+		    return BadRequest("Username, email or password should not be empty!");
 	    }
 
 		var newUserAdmin = await InitializeUser(request, UserRoleNames.Administrator);
@@ -65,14 +65,14 @@ public class RegisterController : ControllerBase
 	    return Ok(newUserAdmin);
     }
 
-    [HttpPost("Manager")]
-    public async Task<ActionResult<UserModel>> RegisterManager([FromBody] UserAuthModel request)
-    {
-	    if (string.IsNullOrEmpty(request.EmailAddress) &&
-	        string.IsNullOrEmpty(request.Username) &&
+	[HttpPost("Manager")]
+	public async Task<ActionResult<UserModel>> RegisterManager([FromBody] UserAuthModel request)
+	{
+		if (string.IsNullOrEmpty(request.EmailAddress) ||
+	        string.IsNullOrEmpty(request.Username) ||
 	        string.IsNullOrEmpty(request.Password))
 	    {
-		    return BadRequest("Username, email and password should not be empty!");
+		    return BadRequest("Username, email or password should not be empty!");
 	    }
 
 		var newUserManager = await InitializeUser(request, UserRoleNames.Manager);
