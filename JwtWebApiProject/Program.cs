@@ -5,13 +5,46 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationContext>(options => 
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Register all dependencies
+builder.Services.AddDiServices();
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+
+// Add availability to authorize via token in swagger
+builder.Services.AddSwaggerGen(options =>
+{
+	options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+	{
+		Scheme = "Bearer",
+		BearerFormat = "JWT",
+		Description = "Bearer Authentication with JWT Token",
+		In = ParameterLocation.Header,
+		Name = "Authorization",
+		Type = SecuritySchemeType.Http
+	});
+	options.AddSecurityRequirement(new OpenApiSecurityRequirement
+	{
+		{
+			new OpenApiSecurityScheme
+			{
+				Reference = new OpenApiReference
+				{
+					Id = "Bearer",
+					Type = ReferenceType.SecurityScheme
+				}
+			},
+			new List<string>()
+		}
+	});
+});
 
 // Add configuration for JWT authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -25,29 +58,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 			ValidateIssuerSigningKey = true,
 			ValidIssuer = builder.Configuration.GetSection("Jwt:Issuer").Value,
 			ValidAudience = builder.Configuration.GetSection("Jwt:Audience").Value,
-			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt:Key").Value))
+			IssuerSigningKey =
+				new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt:Key").Value))
 		};
 	});
-
-// Register all dependencies
-builder.Services.AddDiServices();
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-
-// Add availability to authorize via token in swagger
-builder.Services.AddSwaggerGen(options =>
-{
-	options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-	{
-		Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
-		In = ParameterLocation.Header,
-		Name = "Authorization",
-		Type = SecuritySchemeType.ApiKey
-	});
-
-	options.OperationFilter<SecurityRequirementsOperationFilter>();
-});
 
 var app = builder.Build();
 
