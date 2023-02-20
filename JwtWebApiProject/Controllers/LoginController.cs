@@ -36,7 +36,7 @@ public class LoginController : ControllerBase
 	[Authorize(Roles = UserRoleNames.Administrator)]
 	public async Task<IEnumerable<UserModel>> GetAllUsersAsync()
 	{
-		var allUsers = await _uow.Users.GetAll();
+		var allUsers = await _uow.Users.GetAllAsync();
 
 		return allUsers;
 	}

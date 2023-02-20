@@ -4,5 +4,5 @@ namespace JwtWebApi.Interfaces;
 
 public interface IRoleRepository
 {
-	Task<RoleModel> Get(string roleName);
+	Task<RoleModel> GetAsync(string roleName);
 }

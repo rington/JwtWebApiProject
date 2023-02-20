@@ -14,7 +14,7 @@ public class RoleRepository : IRoleRepository
 		_db = db;
 	}
 
-	public async Task<RoleModel> Get(string roleName)
+	public async Task<RoleModel> GetAsync(string roleName)
 	{
 		var userRole = await _db.Roles.FirstOrDefaultAsync(r => r.Name == roleName);
 

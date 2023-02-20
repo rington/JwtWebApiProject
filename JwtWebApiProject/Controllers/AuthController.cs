@@ -30,7 +30,7 @@ public class AuthController : ControllerBase
 			return BadRequest("Username, email or password should not be empty!");
 		}
 
-		var user = await _uow.Users.Get(credentials);
+		var user = await _uow.Users.GetAsync(credentials);
 		var userRole = _uow.Users.GetUserRole(user);
 
 		if (user == null)

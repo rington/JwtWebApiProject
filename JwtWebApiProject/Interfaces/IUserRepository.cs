@@ -5,7 +5,7 @@ namespace JwtWebApi.Interfaces;
 public interface IUserRepository
 {
 	Task CreateAsync(UserModel user);
-	Task<UserModel> Get(UserAuthModel credentials);
-	Task<IEnumerable<UserModel>> GetAll();
+	Task<UserModel> GetAsync(UserAuthModel credentials);
+	Task<IEnumerable<UserModel>> GetAllAsync();
 	RoleModel GetUserRole(UserModel user);
 }

@@ -93,7 +93,7 @@ public class RegisterController : ControllerBase
     {
 	    AuthHelper.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-		var userRole = await _uow.Roles.Get(role);
+		var userRole = await _uow.Roles.GetAsync(role);
 
 	    var newUser = new UserModel()
 	    {

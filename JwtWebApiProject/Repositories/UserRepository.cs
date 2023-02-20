@@ -24,7 +24,7 @@ public class UserRepository : IUserRepository
 		await _db.Users.AddAsync(user);
 	}
 
-	public async Task<UserModel> Get(UserAuthModel credentials)
+	public async Task<UserModel> GetAsync(UserAuthModel credentials)
 	{
 		var user = await _db.Users
 			.FirstOrDefaultAsync(u => u.Username.ToLower() == credentials.Username.ToLower() &&
@@ -33,7 +33,7 @@ public class UserRepository : IUserRepository
 		return user;
 	}
 
-	public async Task<IEnumerable<UserModel>> GetAll()
+	public async Task<IEnumerable<UserModel>> GetAllAsync()
 	{
 		var users = await _db.Users.Include("Role").ToListAsync();
 
