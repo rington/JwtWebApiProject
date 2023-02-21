@@ -53,7 +53,6 @@ public class AuthController : ControllerBase
 		return Ok(new JwtTokenResponse
 		{
 			AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
-			CreatedAt = DateTime.Now,
 			Expires = token.ValidTo
 		});
 	}

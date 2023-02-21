@@ -28,7 +28,7 @@ public class LoginController : ControllerBase
 			return BadRequest("User not found!");
 		}
 
-		return Ok($"Welcome {currentUser.Username}! You have {currentUser.Role?.Name} rights.");
+		return Ok($"Welcome! You have {currentUser.Role?.Name} rights.");
 	}
 
 
@@ -51,7 +51,7 @@ public class LoginController : ControllerBase
 			return BadRequest("User not found!");
 		}
 
-		return Ok($"Welcome {currentUser.Username}! You have {currentUser.Role?.Name} rights.");
+		return Ok($"Welcome! You have {currentUser.Role?.Name} rights.");
 	}
 
 	[HttpGet(UserRoleNames.User)]
@@ -64,7 +64,7 @@ public class LoginController : ControllerBase
 			return BadRequest("User not found!");
 		}
 
-		return Ok($"Welcome {currentUser.Username}!");
+		return Ok($"Welcome!");
 	}
 
 	private UserModel GetUserFromContext()
@@ -80,7 +80,6 @@ public class LoginController : ControllerBase
 
 			return new UserModel
 			{
-				Username = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier)?.Value,
 				EmailAddress = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
 				Role = userRole
 			};
