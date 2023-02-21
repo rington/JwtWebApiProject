@@ -52,7 +52,7 @@ public class AuthController : ControllerBase
 
 		return Ok(new JwtTokenResponse
 		{
-			Token = new JwtSecurityTokenHandler().WriteToken(token),
+			AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
 			CreatedAt = DateTime.Now,
 			Expires = token.ValidTo
 		});
