@@ -91,7 +91,7 @@ public class RegisterController : ControllerBase
 
     private async Task<UserModel> InitializeUserAsync(UserAuthModel request, string role) 
     {
-	    AuthHelper.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
+	    PasswordHelper.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
 		var userRole = await _uow.Roles.GetAsync(role);
 

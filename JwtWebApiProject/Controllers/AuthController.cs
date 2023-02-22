@@ -1,7 +1,6 @@
 ﻿using JwtWebApi.Helpers;
 using JwtWebApi.Interfaces;
 using JwtWebApi.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -38,12 +37,12 @@ public class AuthController : ControllerBase
 			return BadRequest("User not found!");
 		}
 
-		if (!AuthHelper.VerifyPasswordHash(credentials.Password, user.PasswordHash, user.PasswordSalt))
+		if (!PasswordHelper.VerifyPasswordHash(credentials.Password, user.PasswordHash, user.PasswordSalt))
 		{
 			return BadRequest("Wrong password!");
 		}
 
-		var token = AuthHelper.GenerateJwtToken(
+		var token = TokenHelper.GenerateJwtToken(
 			user, 
 			userRole,
 			_cfg.GetSection("Jwt:Key").Value,
