@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using JwtWebApi.ConstsAndEnums;
+﻿using JwtWebApi.ConstsAndEnums;
 using JwtWebApi.Interfaces;
 using JwtWebApi.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -12,17 +11,19 @@ namespace JwtWebApi.Controllers;
 public class LoginController : ControllerBase
 {
 	private readonly IUnitOfWork _uow;
+	private readonly IUserService _userService;
 
-	public LoginController(IUnitOfWork uow)
+	public LoginController(IUnitOfWork uow, IUserService userService)
 	{
 		_uow = uow;
+		_userService = userService;
 	}
 
 	[HttpGet(UserRoleNames.Administrator)]
 	[Authorize(Roles = UserRoleNames.Administrator)]
 	public IActionResult LoginAsAdmin()
 	{
-		var currentUser = GetUserFromContext();
+		var currentUser = _userService.GetUserFromContext();
 		if (currentUser == null)
 		{
 			return BadRequest("User not found!");
@@ -45,7 +46,7 @@ public class LoginController : ControllerBase
 	[Authorize(Roles = UserRoleNames.Manager)]
 	public IActionResult LoginAsManager()
 	{
-		var currentUser = GetUserFromContext();
+		var currentUser = _userService.GetUserFromContext();
 		if (currentUser == null)
 		{
 			return BadRequest("User not found!");
@@ -58,33 +59,12 @@ public class LoginController : ControllerBase
 	[Authorize(Roles = UserRoleNames.User)]
 	public IActionResult LoginAsUser()
 	{
-		var currentUser = GetUserFromContext();
+		var currentUser = _userService.GetUserFromContext();
 		if (currentUser == null)
 		{
 			return BadRequest("User not found!");
 		}
 
 		return Ok($"Welcome!");
-	}
-
-	private UserModel GetUserFromContext()
-	{
-		if (HttpContext.User.Identity is ClaimsIdentity identity)
-		{
-			var userClaims = identity.Claims;
-
-			var userRole = new RoleModel
-			{
-				Name = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Role)?.Value
-			};
-
-			return new UserModel
-			{
-				EmailAddress = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
-				Role = userRole
-			};
-		}
-
-		return null;
 	}
 }

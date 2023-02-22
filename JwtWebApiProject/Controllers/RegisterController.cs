@@ -1,7 +1,6 @@
 ﻿using JwtWebApi.ConstsAndEnums;
 using JwtWebApi.Models;
 using Microsoft.AspNetCore.Mvc;
-using JwtWebApi.Helpers;
 using JwtWebApi.Interfaces;
 
 namespace JwtWebApi.Controllers;
@@ -11,10 +10,12 @@ namespace JwtWebApi.Controllers;
 public class RegisterController : ControllerBase
 {
 	private readonly IUnitOfWork _uow;
+	private readonly IUserService _userService;
 
-	public RegisterController(IUnitOfWork unitOfWork)
+	public RegisterController(IUnitOfWork unitOfWork, IUserService userService)
 	{
 		_uow = unitOfWork;
+		_userService = userService;
 	}
 
 	[HttpPost("User")]
@@ -27,7 +28,7 @@ public class RegisterController : ControllerBase
 			return BadRequest("Username, email or password should not be empty!");
 		}
 
-		var newUser = await InitializeUserAsync(request, UserRoleNames.User);
+		var newUser = await _userService.InitializeUserAsync(_uow, request, UserRoleNames.User);
 		try
 		{
             await _uow.Users.CreateAsync(newUser);
@@ -51,7 +52,7 @@ public class RegisterController : ControllerBase
 		    return BadRequest("Username, email or password should not be empty!");
 	    }
 
-		var newUserAdmin = await InitializeUserAsync(request, UserRoleNames.Administrator);
+		var newUserAdmin = await _userService.InitializeUserAsync(_uow, request, UserRoleNames.Administrator);
 		try
 	    {
 		    await _uow.Users.CreateAsync(newUserAdmin);
@@ -75,7 +76,7 @@ public class RegisterController : ControllerBase
 		    return BadRequest("Username, email or password should not be empty!");
 	    }
 
-		var newUserManager = await InitializeUserAsync(request, UserRoleNames.Manager);
+		var newUserManager = await _userService.InitializeUserAsync(_uow, request, UserRoleNames.Manager);
 		try
 	    {
 		    await _uow.Users.CreateAsync(newUserManager);
@@ -87,23 +88,5 @@ public class RegisterController : ControllerBase
 	    }
 
 	    return Ok(newUserManager);
-    }
-
-    private async Task<UserModel> InitializeUserAsync(UserAuthModel request, string role) 
-    {
-	    PasswordHelper.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
-
-		var userRole = await _uow.Roles.GetAsync(role);
-
-	    var newUser = new UserModel()
-	    {
-		    Username = request.Username?.ToLower(),
-		    EmailAddress = request.EmailAddress?.ToLower(),
-		    PasswordHash = passwordHash,
-		    PasswordSalt = passwordSalt,
-		    Role = userRole,
-	    };
-
-	    return newUser;
     }
 }

@@ -14,7 +14,7 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 
 // Register all dependencies
 builder.Services.AddDiServices();
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
