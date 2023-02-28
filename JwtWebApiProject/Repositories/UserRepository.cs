@@ -1,6 +1,6 @@
 ﻿using JwtWebApi.EFContext;
 using JwtWebApi.Interfaces;
-using JwtWebApi.Models;
+using JwtWebApi.Models.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace JwtWebApi.Repositories;
@@ -33,6 +33,13 @@ public class UserRepository : IUserRepository
 		return user;
 	}
 
+	public async Task<UserModel> GetUserByIdAsync(Guid userId)
+	{
+		var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+		return user;
+	}
+
 	public async Task<IEnumerable<UserModel>> GetAllAsync()
 	{
 		var users = await _db.Users.Include("Role").ToListAsync();
@@ -45,5 +52,10 @@ public class UserRepository : IUserRepository
 		var userRole = _db.Users.Include(u => u.Role).FirstOrDefault(u => u.Id == user.Id)?.Role;
 
 		return userRole;
+	}
+
+	public void Update(UserModel user)
+	{
+		_db.Users.Update(user);
 	}
 }

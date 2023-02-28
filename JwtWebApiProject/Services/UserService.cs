@@ -1,6 +1,7 @@
 ﻿using JwtWebApi.Helpers;
 using JwtWebApi.Interfaces;
 using JwtWebApi.Models;
+using JwtWebApi.Models.User;
 using System.Security.Claims;
 
 namespace JwtWebApi.Services;
@@ -33,7 +34,7 @@ public class UserService : IUserService
 	}
 	public UserModel GetUserFromContext()
 	{
-		if (_contextAccessor?.HttpContext?.User.Identity is ClaimsIdentity identity)
+		if (_contextAccessor.HttpContext?.User.Identity is ClaimsIdentity identity)
 		{
 			var userClaims = identity.Claims;
 
@@ -44,6 +45,7 @@ public class UserService : IUserService
 
 			return new UserModel
 			{
+				Id = Guid.Parse(userClaims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier)?.Value),
 				EmailAddress = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
 				Role = userRole
 			};

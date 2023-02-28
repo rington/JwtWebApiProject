@@ -1,6 +1,6 @@
 ﻿using JwtWebApi.EFContext;
 using JwtWebApi.Interfaces;
-using JwtWebApi.Models;
+using JwtWebApi.Models.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace JwtWebApi.Repositories;

@@ -62,6 +62,7 @@ builder.Services.AddAuthentication(x =>
 			ValidateIssuerSigningKey = true,
 			ValidIssuer = builder.Configuration.GetSection("Jwt:Issuer").Value,
 			ValidAudience = builder.Configuration.GetSection("Jwt:Audience").Value,
+			ClockSkew = TimeSpan.Zero,
 			IssuerSigningKey =
 				new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt:Key").Value))
 		};

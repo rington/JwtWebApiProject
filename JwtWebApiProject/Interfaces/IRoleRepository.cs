@@ -1,4 +1,4 @@
-﻿using JwtWebApi.Models;
+﻿using JwtWebApi.Models.User;
 
 namespace JwtWebApi.Interfaces;
 

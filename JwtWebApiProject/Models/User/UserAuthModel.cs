@@ -1,4 +1,4 @@
-﻿namespace JwtWebApi.Models;
+﻿namespace JwtWebApi.Models.User;
 
 public class UserAuthModel
 {

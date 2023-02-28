@@ -1,7 +1,7 @@
 ﻿using JwtWebApi.ConstsAndEnums;
-using JwtWebApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using JwtWebApi.Interfaces;
+using JwtWebApi.Models.User;
 
 namespace JwtWebApi.Controllers;
 

@@ -13,6 +13,7 @@ public static class DiServiceCollection
 		services.AddScoped<IRoleRepository, RoleRepository>();
 
 		services.AddScoped<IUserService, UserService>();
+		services.AddScoped<ITokenService, TokenService>();
 
 		return services;
 	}

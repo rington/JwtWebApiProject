@@ -1,6 +1,6 @@
 ﻿using JwtWebApi.ConstsAndEnums;
 using JwtWebApi.Interfaces;
-using JwtWebApi.Models;
+using JwtWebApi.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
