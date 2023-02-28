@@ -33,7 +33,7 @@ public class LoginController : ControllerBase
 	}
 
 
-	[HttpGet($"{UserRoleNames.Administrator}/users")]
+	[HttpGet($"{UserRoleNames.Administrator}/Users")]
 	[Authorize(Roles = UserRoleNames.Administrator)]
 	public async Task<IEnumerable<UserModel>> GetAllUsersAsync()
 	{
